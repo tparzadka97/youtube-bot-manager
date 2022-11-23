@@ -1,35 +1,12 @@
 const express = require("express");
+const config = require("config");
 const app = express();
-const apiKey = "";
 
-const { google } = require("googleapis");
-const youtube = google.youtube({
-  version: "v3",
-  auth: apiKey,
-});
+require("./startup/routes")(app);
 
-app.get("/", (req, res) => {
-  res.send("Hello from our server.");
-});
+const port = process.env.PORT || config.get("port");
+const server = app.listen(port, () =>
+  console.log(`Listening on port ${port}...`)
+);
 
-app.get("/search-with-googleapis", async (req, res, next) => {
-  const params = {
-    parentId: req.query.parentId,
-    part: "snippet",
-  };
-  try {
-    // const searchQuery = req.query.parentId;
-    const response = await youtube.comments.list(params);
-
-    const titles = response.data.items.map((item) => item.snippet.textDisplay);
-    res.send(titles);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.get("/api", (req, res) => {
-  res.json({ users: ["userOne", "userTwo"] });
-});
-
-app.listen(3030, () => console.log("server started on port 3030"));
+module.exports = server;
