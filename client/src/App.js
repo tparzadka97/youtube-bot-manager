@@ -1,11 +1,12 @@
 import React from "react";
+import Home from "./pages/home/Home";
 
-import Form from "./components/Form";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
     <div>
-      <Form></Form>
+      <Home></Home>
     </div>
   );
 }
