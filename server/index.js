@@ -1,10 +1,10 @@
 const express = require("express");
-const config = require("config");
 const app = express();
 
+require("dotenv").config();
 require("./startup/routes")(app);
 
-const port = process.env.PORT || config.get("port");
+const port = process.env.PORT || 3900;
 const server = app.listen(port, () =>
   console.log(`Listening on port ${port}...`)
 );
