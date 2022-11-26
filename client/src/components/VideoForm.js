@@ -23,7 +23,7 @@ export default function VideoForm() {
     try {
       const response = await axios.post("/api/youtube/videos", { id });
       console.log(response.data);
-      navigate("/search/video", { state: response.data });
+      navigate("/search/video-details", { state: response.data });
     } catch (error) {
       console.log(error.response);
     }
