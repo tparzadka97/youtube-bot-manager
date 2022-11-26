@@ -10,16 +10,19 @@ import axios from "axios";
 export default function VideoForm() {
   const navigate = useNavigate();
 
-  const [url, setUrl] = useState("");
+  const [formValue, setFormValue] = useState("");
 
-  const urlChangeHandler = (event) => {
-    setUrl(event.target.value);
+  const videoRegex =
+    /^\s*((?:(?:https?:)?\/\/)?(?:(?:www|m)\.)?(?:youtube\.com|youtu.be)(?:\/(?:[\w-]+\?v=|embed\/|v\/|shorts\/)?))?([\w-]{11})/i;
+
+  const changeHandler = (event) => {
+    setFormValue(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const id = parseVideoId(url);
-    setUrl("");
+    const id = getVideoId(formValue);
+    setFormValue("");
     try {
       const response = await axios.post("/api/youtube/videos", { id });
       console.log(response.data);
@@ -29,20 +32,19 @@ export default function VideoForm() {
     }
   };
 
-  const parseVideoId = (url) => {
-    return url.split("=")[1].split("&")[0];
+  const getVideoId = (value) => {
+    return value.match(videoRegex);
   };
 
   return (
     <div>
       <Form onSubmit={handleSubmit}>
-        <Form.Label htmlFor="basic-url">YouTube Video URL</Form.Label>
+        <Form.Label>YouTube Video URL or Video ID</Form.Label>
         <InputGroup className="mb-3">
           <Form.Control
-            id="basic-url"
-            value={url}
-            type="url"
-            onChange={urlChangeHandler}
+            type="text"
+            value={formValue}
+            onChange={changeHandler}
           />
         </InputGroup>
 
